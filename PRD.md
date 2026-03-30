@@ -181,6 +181,7 @@ Loop stops when:
 ```text
 ml-model-debugger/
 │
+├── pyproject.toml      # Managed by uv
 ├── main.py
 │
 ├── core/
@@ -213,6 +214,10 @@ ml-model-debugger/
 ---
 
 ## 4.2 Core Components
+
+### Infrastructure & Tooling
+
+* **uv:** Used for fast, reliable virtual environment and dependency management.
 
 ### Data Loader
 
@@ -269,9 +274,9 @@ Supported:
 
 # 5. 🧠 Design Principles
 
-## 5.1 Modularity
+## 5.1 Clean Code & Modularity
 
-Each component is independent and replaceable.
+The codebase follows clean code principles. Each component is independent, replaceable, and highly modular to ensure long-term maintainability.
 
 ---
 
