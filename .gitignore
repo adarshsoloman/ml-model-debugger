@@ -15,10 +15,12 @@ uv.lock
 pyproject.toml
 
 # Project specific
-results.json
+outputs/
 ml-model-debugger/data/sample_regression.csv
 PRD.md
 timestamp.md
+data/
+scripts/
 
 # IDEs
 .vscode/
@@ -27,3 +29,4 @@ timestamp.md
 # OS files
 .DS_Store
 Thumbs.db
+

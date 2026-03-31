@@ -1,34 +1,39 @@
+from core.config import Config
+
 class ModelDiagnosis:
     UNDERFITTING = "Underfitting"
     OVERFITTING = "Overfitting"
     ACCEPTABLE = "Acceptable"
     UNKNOWN = "Unknown"
 
-from core.config import Config
-
 class Analyzer:
-    def __init__(self, performance_threshold: float = None, overfitting_ratio: float = None):
+    def __init__(self, min_threshold: float = None, high_threshold: float = None, overfitting_delta: float = None):
         """
-        Initialize the analyzer with heuristics.
+        Initialize the analyzer with updated heuristics.
         """
-        self.performance_threshold = performance_threshold or Config.DEFAULT_PERFORMANCE_THRESHOLD
-        self.overfitting_ratio = overfitting_ratio or Config.DEFAULT_OVERFITTING_RATIO
+        self.min_threshold = min_threshold or Config.MIN_ACCEPTABLE_THRESHOLD
+        self.high_threshold = high_threshold or Config.HIGH_PERFORMANCE_THRESHOLD
+        self.overfitting_delta = overfitting_delta or Config.OVERFITTING_SCORE_DELTA
 
     def diagnose(self, train_metrics: dict, val_metrics: dict) -> str:
         """
         Compare training and validation metrics to diagnose model behavior.
-        We primarily look at RMSE and R2.
         """
-        train_rmse = train_metrics.get("rmse", 0)
-        val_rmse = val_metrics.get("rmse", 0)
-        train_r2 = train_metrics.get("r2", 0)
+        # Determine scores (R2 for regression, Accuracy for classification)
+        train_score = train_metrics.get("r2") or train_metrics.get("accuracy") or 0
+        val_score = val_metrics.get("r2") or val_metrics.get("accuracy") or 0
 
-        # 1. Check for Underfitting: Model performs poorly even on training data
-        if train_r2 < self.performance_threshold:
-            return ModelDiagnosis.UNDERFITTING
-
-        # 2. Check for Overfitting: High variance between train and validation error
-        if train_rmse > 0 and (val_rmse / train_rmse) > self.overfitting_ratio:
+        # 1. Overfitting: Training score is significantly higher than validation score
+        if (train_score - val_score) > self.overfitting_delta:
             return ModelDiagnosis.OVERFITTING
 
-        return ModelDiagnosis.ACCEPTABLE
+        # 2. Underfitting: Validation score is below the minimum floor
+        if val_score < self.min_threshold:
+            return ModelDiagnosis.UNDERFITTING
+
+        # 3. Acceptable: Only if validation score is above high performance threshold
+        if val_score >= self.high_threshold:
+            return ModelDiagnosis.ACCEPTABLE
+
+        # 4. Moderate: Default to underfitting to encourage refinement
+        return ModelDiagnosis.UNDERFITTING
