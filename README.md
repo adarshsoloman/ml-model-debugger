@@ -86,7 +86,29 @@ uv sync
 
 ---
 
-## 6. Design Principles
+## 6. Usage
+The system is controlled via a CLI interface. You can run the default demo or provide your own dataset and configuration.
+
+### 6.1 Running the Demo
+```bash
+uv run ml-model-debugger/main.py
+```
+
+### 6.2 Running with Custom Configuration
+```bash
+uv run ml-model-debugger/main.py --data <path_to_csv> --target <target_column> --task <regression|classification> --model <linear|tree|forest> --iters <max_iterations>
+```
+
+#### CLI Arguments:
+- `--data`: Path to the CSV dataset.
+- `--target`: Name of the target (label) column.
+- `--task`: Type of ML task (`regression` or `classification`).
+- `--model`: Initial model architecture (`linear`, `tree`, `forest`).
+- `--iters`: Maximum number of iterations for the refinement loop.
+
+---
+
+## 7. Design Principles
 
 ### 6.1 Modularity
 Each component (Analyzer, Suggester, Fixer) operates as an independent unit. This allows for swapping the diagnostic logic without modifying the training loop.
@@ -107,8 +129,8 @@ A successful execution is defined by:
 
 ---
 
-## 8. Roadmap
-- **Phase 1**: Core IRL implementation with tabular regression support.
-- **Phase 2**: Integration of classification tasks and complex heuristics.
-- **Phase 3**: Automated feature engineering suggestions.
-- **Phase 4**: Streamlit-based visualization dashboard.
+## 9. Roadmap
+- [x] **Phase 1**: Core IRL implementation with tabular regression support.
+- [x] **Phase 2**: Integration of classification tasks and complex heuristics.
+- [ ] **Phase 3**: Automated feature engineering suggestions.
+- [ ] **Phase 4**: Streamlit-based visualization dashboard.
