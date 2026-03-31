@@ -12,6 +12,7 @@ ENV/
 # uv
 uv.lock
 .python-version
+pyproject.toml
 
 # Project specific
 results.json
